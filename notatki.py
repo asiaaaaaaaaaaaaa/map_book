@@ -1,14 +1,13 @@
-from models.data import users
-from utils.crud import show_users
+import requests
+from bs4 import BeautifulSoup
 
+def get_cordinates(miejscowośc:str)->list[float,float]:
+    url:str=f"https://pl.wikipedia.org/wiki/Lublin{miejscowość}"
+    response=requests.get(url)
+    response_html=BeautifulSoup(response.text,"html.parser")
+    latitude= float(response_html.select(".latitude")[1].text.repleace(","._new"."))
+    longitude=float(response_html.select(".latitude")[1].text.repleace(","._new"."))
+    return [latitude, longitude]
 
-def update_user(users)-> None:
-    Kogo_szukasz=input("Kogo szukasz: ")
-    for user in users:
-        if user['name']==Kogo_szukasz:
-            user['name']=input("podaj nowe imie:")
-            user['surname']=input("podaj nowe nazwisko:")
-            user['posts']=input("podaj nowe liczba postów:")
-print(users)
-update_user(users)
-print(users)
+miejscowość=input("Podaj nazwę miejscowości")
+print(get_cordinates(miejscowość))
